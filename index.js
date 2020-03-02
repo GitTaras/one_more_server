@@ -8,27 +8,25 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const readFilePromise = util.promisify(fs.readFile);
 const writeFilePromise = util.promisify(fs.writeFile);
+import mongoose from './config/mongoose';
+import Messages from './models/Messages.model';
 
 app.use(cors());
 app.use(express.json());
 
-const init = () => {
-  if (fs.existsSync('./chat.json')) {
-    console.log('The path exists.');
+const init = async () => {
+  if (await Messages.estimatedDocumentCount()) {
+    console.log("have some data");
   } else {
-    console.log('Creating file...');
-
-    const items = [];
-
-    for(let i = 0; i < 123; i++) {
-      items.push({
-        "id": faker.random.uuid(),
-        "message": faker.lorem.sentences(), 
-      });
-    }
-    const data = JSON.stringify(items);
-    fs.writeFileSync('chat.json', data);
-    console.log('wrote random data to chat.json...');
+    console.log('Creating fake data...');
+      const items = [];
+      for(let i = 0; i < 123; i++) {
+        items.push( new Messages({
+          message: `${i}`//faker.lorem.sentences(),
+        }) );
+      }
+    let result = await Messages.insertMany(items);
+    console.log('wrote random data to db...');
   }
 };
 
@@ -39,12 +37,10 @@ app.get('/api/chat', async (req, res) => {
   let limit = parseInt(_.get(req, 'query.limit', 15), 10);
 
   try {
+    const length = await Messages.estimatedDocumentCount();
+    const hasMore = length > offset + limit;
 
-    const data = await readFilePromise('./chat.json', 'utf-8');
-    let messages = JSON.parse(data);
-    let hasMore = messages.length > offset + limit;
-
-    messages = hasMore ? messages.slice(messages.length - offset - limit, messages.length - offset) : messages.slice(0, messages.length - offset);
+    const messages  = await Messages.find({}, null, {skip: length - offset - limit, limit});
     res.send({messages, hasMore});
 
   } catch(e) {
@@ -54,16 +50,16 @@ app.get('/api/chat', async (req, res) => {
 });
 
 app.post('/api/chat', async (req, res) => {
-    // res.sendStatus(400);
   try {
-    const data = await readFilePromise('./chat.json', 'utf-8');
-    const messages = JSON.parse(data);
+    const message = req.body.message.trim();
+    if(!message) {
+      throw new Error();
+    }
 
-    messages.push(req.body);
-    await writeFilePromise('./chat.json', JSON.stringify(messages));
+    const newMessage = new Messages({ message });
+    await newMessage.save();
+    res.send(newMessage).status(200);
 
-    res.sendStatus(200);
-    console.log(`write message: ${req.body.id} succesfully!`);
   } catch(e) {
     console.error(e);
     res.sendStatus(400);
@@ -79,18 +75,15 @@ app.delete('/api/chat/:id', async (req, res)=>{
       throw new Error();
     }
 
-    const data = await readFilePromise('./chat.json', 'utf-8');
-    const messages = JSON.parse(data);
-    const index = messages.findIndex((message) => message.id === id);
+    let result = await Messages.findByIdAndDelete(new mongoose.Types.ObjectId(id));
 
-    if (index === -1) {
-      console.log("not found");
+    if (!result._id) {
       throw new Error();
     }
-    messages.splice(index, 1);
-    await writeFilePromise('./chat.json', JSON.stringify( messages));
+
     res.sendStatus(200);
-    console.log(`delete message: ${id} succesfully!`);
+
+
   } catch(e) {
     console.error(e);
     res.sendStatus(400);
