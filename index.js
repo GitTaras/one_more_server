@@ -35,7 +35,6 @@ const init = () => {
 init();
 
 app.get('/api/chat', async (req, res) => {
-  //res.sendStatus(404);
   let offset = parseInt(_.get(req, 'query.offset', 0), 10);
   let limit = parseInt(_.get(req, 'query.limit', 15), 10);
 
@@ -75,11 +74,11 @@ app.post('/api/chat', async (req, res) => {
 app.delete('/api/chat/:id', async (req, res)=>{
   const id = req.params.id.trim();
 
-  if (!id) {
-    return res.sendStatus(404);
-  }
-
   try {
+    if (!id) {
+      throw new Error();
+    }
+
     const data = await readFilePromise('./chat.json', 'utf-8');
     const messages = JSON.parse(data);
     const index = messages.findIndex((message) => message.id === id);
