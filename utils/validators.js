@@ -1,5 +1,5 @@
 import { postMessageSchema, deleteMessageSchema } from './validationShemes';
-import BadReqError from './errors/BadReqError';
+import BadReqError from './errors/BadRequestError';
 
 module.exports.yupValidatorPostMessage = async (req, res, next) => {
   try {

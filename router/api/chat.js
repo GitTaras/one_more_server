@@ -1,6 +1,6 @@
 import express from 'express';
 import chat from '../../controllers/chatController';
-import { yupValidatorPostMessage } from '../../utils/validators';
+import { yupValidatorPostMessage, yupValidatorDeleteMessage } from '../../utils/validators';
 
 const router = express.Router();
 

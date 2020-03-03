@@ -10,7 +10,7 @@ const writeFilePromise = util.promisify(fs.writeFile);
 import mongoose from './config/mongoose';
 import Messages from './models/Messages.model';
 import router from './router';
-import ErrorHandler from './utils/errorHandler';
+import errorHandler from './utils/errorHandler';
 
 app.use(cors());
 app.use(express.json());
