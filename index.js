@@ -1,7 +1,6 @@
 import fs from 'fs';
 import express from 'express';
 import cors from 'cors';
-import faker from 'faker';
 import util from 'util';
 import _ from 'lodash';
 const PORT = process.env.PORT || 5000;
@@ -22,7 +21,7 @@ const init = async () => {
       const items = [];
       for(let i = 0; i < 123; i++) {
         items.push( new Messages({
-          message: `${i}`//faker.lorem.sentences(),
+          message: `${i}`
         }) );
       }
     let result = await Messages.insertMany(items);
@@ -40,7 +39,7 @@ app.get('/api/chat', async (req, res) => {
     const length = await Messages.estimatedDocumentCount();
     const hasMore = length > offset + limit;
 
-    const messages  = await Messages.find({}, null, {skip: length - offset - limit, limit});
+    const messages  = hasMore ?  await Messages.find({}, null, {skip: length - offset - limit, limit}) : await Messages.find({}, null, {limit: length - offset});
     res.send({messages, hasMore});
 
   } catch(e) {
