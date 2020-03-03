@@ -1,12 +1,8 @@
-import fs from 'fs';
 import express from 'express';
 import cors from 'cors';
-import util from 'util';
 import _ from 'lodash';
 const PORT = process.env.PORT || 5000;
 const app = express();
-const readFilePromise = util.promisify(fs.readFile);
-const writeFilePromise = util.promisify(fs.writeFile);
 import mongoose from './config/mongoose';
 import Messages from './models/Messages.model';
 
