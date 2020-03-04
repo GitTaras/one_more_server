@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { KEY_TOKEN } from './constants';
-import UserSchema from '../models/UserSchema';
+import UserSchema from '../models/user-schema';
 import ApplicationError from './errors/ApplicationError';
 import mongoose from "../config/mongoose";
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   try {
     if(req.headers.authorization){
       const token = req.headers.authorization.split(' ')[1];

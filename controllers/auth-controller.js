@@ -1,4 +1,4 @@
-import UserSchema from '../models/UserSchema';
+import UserSchema from '../models/user-schema';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { KEY_TOKEN, expiresToken } from '../utils/constants';
@@ -6,7 +6,7 @@ import NotFoundError from '../utils/errors/NotFoundError';
 import BadReqError from '../utils/errors/BadRequestError';
 import mongoose from "../config/mongoose";
 
-module.exports.createUser = async (req, res, next) => {
+export const createUser = async (req, res, next) => {
   try {
     let {password} = req.body;
     req.body.password = await bcrypt.hash(password, await bcrypt.genSalt(8));
@@ -22,7 +22,7 @@ module.exports.createUser = async (req, res, next) => {
   }
 };
 
-module.exports.login = async (req, res, next) => {
+export const login = async (req, res, next) => {
   try {
     const {email, password} = req.body;
     const user = await UserSchema.findOne({email}, null, {lean: true});
@@ -40,7 +40,7 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
-module.exports.getCurrentUser = async (req, res, next) => {
+export const getCurrentUser = async (req, res, next) => {
   try {
     const user = await UserSchema.findById(
       new mongoose.Types.ObjectId(req._id), { password: 0 }

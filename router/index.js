@@ -1,9 +1,12 @@
-import express from 'express';
-import chat from './api/chat';
-import auth from './api/auth';
+import chat from './chat';
+import auth from './auth';
+import PromiseRouter from 'express-promise-router';
 
-const router = express.Router();
+const router = PromiseRouter();
 
+router.use('/test-reject', function(req, res) {
+  return Promise.reject();
+});
 router.use('/chat', chat);
 router.use('/auth', auth);
 

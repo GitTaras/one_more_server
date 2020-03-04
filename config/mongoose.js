@@ -1,21 +1,8 @@
 import mongoose from "mongoose";
-import Messages from "../models/Messages.model";
+import Messages from "../models/messages-schemal";
 const path = 'mongodb://localhost/twitter';
 
-mongoose.connect(path, {
-  useNewUrlParser: true,
-}, (err) => {
-  if (err) {
-    console.log('can\'t connect to db, fuckout from here');
-    process.exit(1);
-  } else {
-    console.log('DB connection success');
-    init();
-  }
-});
-mongoose.set('debug', true);
-
-const init = async () => {
+const writeFakeData = async () => {
   if (await Messages.estimatedDocumentCount()) {
     console.log("have some data");
   } else {
@@ -31,4 +18,14 @@ const init = async () => {
   }
 };
 
-export default mongoose;
+export default async () => {
+  try {
+    await mongoose.connect(path, {useNewUrlParser: true,});
+    console.log('DB connection success');
+    mongoose.set('debug', true);
+    writeFakeData();
+  } catch (e) {
+    console.log('can\'t connect to db, fuck out from here');
+    process.exit(1);
+  }
+}
