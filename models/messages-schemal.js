@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
 
-const MessagesSchema = mongoose.Schema(
+const MessageSchema = mongoose.Schema(
   {
     message: {
       type: String,
@@ -12,6 +12,9 @@ const MessagesSchema = mongoose.Schema(
   { versionKey: false },
 );
 
-MessagesSchema.plugin(mongoosePaginate);
+MessageSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('Messages', MessagesSchema);
+class Message {}
+MessageSchema.loadClass(Message);
+
+export default mongoose.model('Messages', MessageSchema);

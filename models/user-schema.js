@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from "mongoose-paginate";
 
-const UsersSchema = mongoose.Schema(
+const UserSchema = mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -29,4 +30,8 @@ const UsersSchema = mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('Users', UsersSchema);
+class User {}
+UserSchema.loadClass(User);
+
+
+export default mongoose.model('Users', UserSchema);

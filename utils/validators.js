@@ -31,7 +31,8 @@ const createValidator = (schema, obj) => async (req, res, next) => {
     await schema.validate(req[obj], { abortEarly: false });
     next();
   } catch (err) {
-    //console.log(errToJSON(err));
+    console.log(err);
+    console.log(errToJSON(err));
     next(new BadReqError(err.errors));
   }
 };

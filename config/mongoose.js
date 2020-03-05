@@ -18,14 +18,18 @@ const writeFakeData = async () => {
   }
 };
 
-export default async () => {
+const a = async () => {
   try {
-    await mongoose.connect(path, {useNewUrlParser: true,});
+    const m = await mongoose.connect(path, {useNewUrlParser: true,});
     console.log('DB connection success');
-    mongoose.set('debug', true);
+    m.set('debug', true);
     writeFakeData();
+    return m;
   } catch (e) {
     console.log('can\'t connect to db, fuck out from here');
     process.exit(1);
   }
 }
+
+export default a;
+// export default Promise.resolve(a()).then((mongoose) => mongoose);
