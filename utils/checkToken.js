@@ -12,10 +12,11 @@ export default async (req, res, next) => {
       const decoded = await jwt.verify(token, KEY_TOKEN);
       const user = await UserSchema.findById(new db.Types.ObjectId(decoded._id));
       req._id = user._id;
+      req.token = token;
       return next();
-    } else {
-      return res.end();
     }
+    return next(new ApplicationError('Unauthorized', 401));
+
   } catch (err) {
     console.log(err);
     return next(new ApplicationError('Unauthorized ', 401));

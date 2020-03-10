@@ -23,6 +23,7 @@ export const postMessage = async (req, res, next) => {
     await newMessage.save();
     res.send(newMessage).status(200);
   } catch (err) {
+    console.log(err);
     next(new BadReqError());
   }
 };
@@ -31,7 +32,7 @@ export const deleteMessage = async (req, res, next) => {
   try {
     const { id }  = req.params;
     const db = await mongoose;
-    let result = await Messages.findByIdAndDelete(new db().Types.ObjectId(id));
+    let result = await Messages.findByIdAndDelete(new db.Types.ObjectId(id));
     console.log(result);
     if (!result._id) {
       next(new BadReqError());

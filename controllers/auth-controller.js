@@ -42,7 +42,7 @@ export const login = async (req, res, next) => {
 
 export const getCurrentUser = async (req, res, next) => {
   try {
-    let db = await mongoose();
+    let db = await mongoose;
     const user = await UserSchema.findById(
       new db.Types.ObjectId(req._id), { password: 0 }
     );
@@ -51,7 +51,7 @@ export const getCurrentUser = async (req, res, next) => {
       return next(new NotFoundError())
     }
 
-    res.send(user);
+    res.send({token: req.token,user});
   } catch (err) {
     next(err)
   }
