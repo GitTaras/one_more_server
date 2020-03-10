@@ -6,16 +6,18 @@ import mongoose from "../config/mongoose";
 
 export default async (req, res, next) => {
   try {
+    let db = await mongoose;
     if(req.headers.authorization){
       const token = req.headers.authorization.split(' ')[1];
       const decoded = await jwt.verify(token, KEY_TOKEN);
-      const user = await UserSchema.findById(new mongoose.Types.ObjectId(decoded._id));
+      const user = await UserSchema.findById(new db.Types.ObjectId(decoded._id));
       req._id = user._id;
       return next();
     } else {
       return res.end();
     }
   } catch (err) {
+    console.log(err);
     return next(new ApplicationError('Unauthorized ', 401));
   }
 };

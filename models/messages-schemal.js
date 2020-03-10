@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
 
+const Schema = mongoose.Schema;
+
 const MessageSchema = mongoose.Schema(
   {
+    author: {
+      type: Schema.Types.ObjectId, ref: 'Users',
+      required: true,
+    },
     message: {
       type: String,
         required: true,

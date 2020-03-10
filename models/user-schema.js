@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from "mongoose-paginate";
 
+const Schema = mongoose.Schema;
+
 const UserSchema = mongoose.Schema(
   {
     firstName: {
@@ -24,7 +26,8 @@ const UserSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-    }
+    },
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }]
   },
   { timestamps: { createdAt: true } },
   { versionKey: false },

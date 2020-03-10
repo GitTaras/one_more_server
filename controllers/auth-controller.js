@@ -42,8 +42,9 @@ export const login = async (req, res, next) => {
 
 export const getCurrentUser = async (req, res, next) => {
   try {
+    let db = await mongoose();
     const user = await UserSchema.findById(
-      new mongoose.Types.ObjectId(req._id), { password: 0 }
+      new db.Types.ObjectId(req._id), { password: 0 }
     );
 
     if (!user) {

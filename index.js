@@ -1,10 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import init from './config/mongoose';
+import './config/mongoose';
 import router from './router';
 import errorHandler from './utils/errorHandler';
 
-init();
 const PORT = process.env.PORT || 8000;
 const app = express();
 
