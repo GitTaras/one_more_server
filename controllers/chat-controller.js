@@ -6,8 +6,7 @@ import mongoose from '../config/mongoose';
 export const getAllMessages = async (req, res, next) => {
   try {
     let page = parseInt(_.get(req, 'query.page', 1), 10);
-
-    const messages  = await Messages.paginate({}, {sort: {$natural: -1} , page, limit: 15});
+    const messages  = await Messages.paginate({author: req.currentUser._id}, {sort: {$natural: -1} , page, limit: 15});
     messages.nextPage = messages.page + 1;
     messages.docs.reverse();
     res.send(messages);
@@ -19,7 +18,7 @@ export const getAllMessages = async (req, res, next) => {
 export const postMessage = async (req, res, next) => {
   try {
     const { message }  = req.body;
-    const newMessage = new Messages({ message });
+    const newMessage = new Messages({ author: req.currentUser._id, message });
     await newMessage.save();
     res.send(newMessage).status(200);
   } catch (err) {
@@ -32,10 +31,11 @@ export const deleteMessage = async (req, res, next) => {
   try {
     const { id }  = req.params;
     const db = await mongoose;
-    let result = await Messages.findByIdAndDelete(new db.Types.ObjectId(id));
+
+    let result = await Messages.findOneAndDelete({_id: new db.Types.ObjectId(id), author: req.currentUser._id});
     console.log(result);
-    if (!result._id) {
-      next(new BadReqError());
+    if (!result) {
+     return next(new BadReqError());
     }
     res.sendStatus(200);
   } catch (err) {
