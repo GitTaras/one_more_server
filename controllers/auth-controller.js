@@ -16,6 +16,7 @@ export const createUser = async (req, res, next) => {
     //convert to js object to drop password field
     const newUserObj = newUser.toObject();
     delete newUserObj.password;
+    delete newUserObj.messages;
     res.send({token, user: newUserObj});
   } catch (err) {
     next(new BadReqError());
@@ -43,15 +44,17 @@ export const login = async (req, res, next) => {
 export const getCurrentUser = async (req, res, next) => {
   try {
     let db = await mongoose;
-    const user = await UserSchema.findById(
-      new db.Types.ObjectId(req._id), { password: 0 }
-    );
+    const token = await jwt.sign({_id: req.currentUser._id}, KEY_TOKEN, {expiresIn: expiresToken});
 
-    if (!user) {
+    if (!token) {
       return next(new NotFoundError())
     }
+  //todo convert to obj and delete messages refs array
+    const userObj = req.currentUser.toObject();
+    delete userObj.password;
+    delete userObj.messages;
 
-    res.send({token: req.token,user});
+    res.send({token, user: userObj});
   } catch (err) {
     next(err)
   }
