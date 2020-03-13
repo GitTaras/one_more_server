@@ -49,12 +49,8 @@ export const getCurrentUser = async (req, res, next) => {
     if (!token) {
       return next(new NotFoundError())
     }
-  //todo convert to obj and delete messages refs array
-    const userObj = req.currentUser.toObject();
-    delete userObj.password;
-    delete userObj.messages;
 
-    res.send({token, user: userObj});
+    res.send({token: req.token,user});
   } catch (err) {
     next(err)
   }
