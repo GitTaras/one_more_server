@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { KEY_TOKEN } from './constants';
-import UserSchema from '../models/user-schema';
-import ApplicationError from './errors/ApplicationError';
+import { KEY_TOKEN } from '../utils/constants';
+import UserSchema from '../models/users';
+import ApplicationError from '../utils/errors/ApplicationError';
 import mongoose from "../config/mongoose";
 
 export default async (req, res, next) => {

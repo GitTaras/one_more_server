@@ -1,12 +1,12 @@
 import express from 'express';
 import * as user from '../controllers/auth-controller';
-import { yupValidatorSignIn, yupValidatorSignUp } from '../utils/validators';
-import checkToken from '../utils/checkToken';
+import { validatorSignIn, validatorSignUp } from '../utils/validators';
+import guard from '../controllers/guard-controller';
 
 const router = express.Router();
 
-router.post('/signin', yupValidatorSignIn, user.login);
-router.post('/signup', yupValidatorSignUp, user.createUser);
-router.get('/get-user', checkToken, user.getCurrentUser);
+router.post('/signin', validatorSignIn, user.login);
+router.post('/signup', validatorSignUp, user.createUser);
+router.get('/get-user', guard, user.getCurrentUser);
 
 export default router;

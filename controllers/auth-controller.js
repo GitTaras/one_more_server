@@ -1,4 +1,4 @@
-import UserSchema from '../models/user-schema';
+import UserSchema from '../models/users';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { KEY_TOKEN, expiresToken } from '../utils/constants';
