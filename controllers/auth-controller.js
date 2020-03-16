@@ -50,7 +50,11 @@ export const getCurrentUser = async (req, res, next) => {
       return next(new NotFoundError())
     }
 
-    res.send({token: req.token,user});
+    const user = req.currentUser.toObject();
+    delete user.password;
+    delete user.messages;
+
+    res.send({token: req.token, user});
   } catch (err) {
     next(err)
   }

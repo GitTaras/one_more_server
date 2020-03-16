@@ -19,7 +19,6 @@ export default async (req, res, next) => {
       req.currentUser = user;
       req.token = token;
 
-      console.log(typeof req.currentUser._id);
       return next();
     }
     return next(new ApplicationError('Unauthorized', 401));

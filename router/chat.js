@@ -1,12 +1,13 @@
 import * as chat from '../controllers/chat-controller';
-import { validatorPostMessage, validatorDeleteMessage } from '../utils/validators';
-import guard from '../controllers/guard-controller';
 import PromiseRouter from 'express-promise-router';
+import guard from '../controllers/guard-controller';
+import createValidator from '../utils/create-validator';
+import {postMessageSchema, deleteMessageSchema} from "../utils/validationShemes";
 
 const router = PromiseRouter();
 
 router.get('/', guard,  chat.getAllMessages);
-router.post('/', guard, validatorPostMessage, chat.postMessage);
-router.delete('/:id', guard, validatorDeleteMessage, chat.deleteMessage);
+router.post('/', guard, createValidator(postMessageSchema), chat.postMessage);
+router.delete('/:id', guard, createValidator(null, deleteMessageSchema), chat.deleteMessage);
 
 export default router;
