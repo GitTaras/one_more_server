@@ -30,7 +30,7 @@ export const login = async (req, res, next) => {
 
     const isSamePasswords = await bcrypt.compare(password, user.password);
     if (!isSamePasswords) {
-      return next(new BadReqError());
+      return next(new BadReqError("wrong email or password"));
     }
 
     const newToken = await jwt.sign({_id: user._id}, KEY_TOKEN, {expiresIn: expiresToken});

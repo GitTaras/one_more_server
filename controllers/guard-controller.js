@@ -24,7 +24,6 @@ export default async (req, res, next) => {
     return next(new ApplicationError('Unauthorized', 401));
 
   } catch (err) {
-    console.log(err);
     return next(new ApplicationError('Unauthorized ', 401));
   }
 };
