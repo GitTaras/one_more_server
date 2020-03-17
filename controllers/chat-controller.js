@@ -32,7 +32,6 @@ export const deleteMessage = async (req, res, next) => {
     const db = await mongoose;
 
     let result = await Messages.findOneAndDelete({_id: new db.Types.ObjectId(id), author: req.currentUser.id});
-    console.log(result);
     if (!result) {
      return next(new BadReqError());
     }

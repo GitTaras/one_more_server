@@ -13,14 +13,14 @@ export const deleteMessageSchema = Yup.object().shape({
     .required('missing id'),
 });
 
-export const signupSchema = Yup.object().shape({
+export const signUpSchema = Yup.object().shape({
   firstName: Yup.string().required().trim().min(2, 'min length is 2 charts').max(16, 'max length is 16 charts'),
   lastName: Yup.string().required().trim().min(2, 'min length is 2 charts').max(16, 'max length is 16 charts'),
   email: Yup.string().required().email().trim().max(30, 'max length is 30 charts').min(6, 'min length is 6 charts'),
   password: Yup.string().required().trim().min(6, 'min length is 6 charts').max(50, 'max length is 50 charts'),
 });
 
-export const signinSchema = Yup.object().shape({
+export const signInSchema = Yup.object().shape({
   email: Yup.string().required().email('bad email').trim().max(30, 'max length is 30 charts').min(6, 'min length is 6 charts'),
   password: Yup.string().required().trim().min(6, 'min length is 6 charts').max(50, 'max length is 50 charts')
 });
