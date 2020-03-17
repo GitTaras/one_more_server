@@ -21,6 +21,9 @@ const Users = mongoose.Schema(
       type: String,
       minlength: 6,
       maxlength: 30,
+      dropDups: true,
+      index: true,
+      unique: true,
       required: true,
     },
     password: {

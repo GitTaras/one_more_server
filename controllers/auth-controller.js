@@ -8,7 +8,7 @@ import mongoose from "../config/mongoose";
 
 export const createUser = async (req, res, next) => {
   try {
-    let {password} = req.body;
+    let {password, email} = req.body;
     req.body.password = await bcrypt.hash(password, await bcrypt.genSalt(8));
     const user = new UserSchema(req.body);
     const newUser = await user.save();
@@ -19,6 +19,9 @@ export const createUser = async (req, res, next) => {
     delete newUserObj.messages;
     res.send({token, user: newUserObj});
   } catch (err) {
+    if (err.code === 11000 ) {
+      return next(new BadReqError("Email already exists"));
+    }
     next(new BadReqError());
   }
 };
@@ -37,7 +40,7 @@ export const login = async (req, res, next) => {
     delete user.password;
     res.send({token: newToken, user});
   } catch (err) {
-    next(new NotFoundError())
+    next(new BadReqError("User not found"))
   }
 };
 
