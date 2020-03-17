@@ -36,6 +36,16 @@ const Users = mongoose.Schema(
   { versionKey: false },
 );
 
+Users.set('toObject', {
+    virtuals: true,
+    transform: function (doc, ret) {
+      delete ret.password;
+      delete ret.__v;
+      delete ret._id;
+      delete ret.messages;
+    }
+});
+
 class User {}
 Users.loadClass(User);
 

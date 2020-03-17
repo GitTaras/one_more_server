@@ -16,6 +16,7 @@ const MessageSchema = mongoose.Schema(
   },
   { timestamps: { createdAt: true } },
   { versionKey: false },
+  {virtual: true}
 );
 
 MessageSchema.plugin(mongoosePaginate);
