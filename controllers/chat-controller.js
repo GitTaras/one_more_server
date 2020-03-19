@@ -1,4 +1,4 @@
-import Messages from '../models/messages';
+import Messages from '../models/Message';
 import BadReqError from '../utils/errors/BadRequestError';
 import _ from "lodash";
 import mongoose from '../config/mongoose';

@@ -3,7 +3,7 @@ import mongoosePaginate from "mongoose-paginate";
 
 const Schema = mongoose.Schema;
 
-const Users = mongoose.Schema(
+const UserSchema = mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -36,9 +36,11 @@ const Users = mongoose.Schema(
   { versionKey: false },
 );
 
-Users.set('toObject', {
+UserSchema.set('toJSON', {
     virtuals: true,
     transform: function (doc, ret) {
+      delete ret.createdAt;
+      delete ret.updatedAt;
       delete ret.password;
       delete ret.__v;
       delete ret._id;
@@ -47,7 +49,7 @@ Users.set('toObject', {
 });
 
 class User {}
-Users.loadClass(User);
+UserSchema.loadClass(User);
 
 
-export default mongoose.model('Users', Users);
+export default mongoose.model('Users', UserSchema);
