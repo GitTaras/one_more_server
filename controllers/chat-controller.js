@@ -6,9 +6,8 @@ import mongoose from '../config/mongoose';
 export const getAllMessages = async (req, res, next) => {
   try {
     let page = parseInt(_.get(req, 'query.page', 1), 10);
-    const messages  = await Messages.paginate({author: req.currentUser.id}, {sort: {$natural: -1} , page, limit: 15});
+    const messages  = await Messages.paginate({author: req.currentUser.id}, {sort: {_id: -1} , page, limit: 15});
     messages.nextPage = messages.page + 1;
-    messages.docs.reverse();
     res.send(messages);
   } catch (err) {
     next(new BadReqError());

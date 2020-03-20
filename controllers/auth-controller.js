@@ -44,8 +44,8 @@ export const login = async (req, res, next) => {
     const {email, password} = req.body;
     const user = await Users.findOne({email}, null);
 
-    const isSamePasswords = await bcrypt.compare(password, user.password);
-    if (!isSamePasswords) {
+    const isEqualsPasswords = await bcrypt.compare(password, user.password);
+    if (!isEqualsPasswords) {
       return next(new BadReqError("wrong email or password"));
     }
 

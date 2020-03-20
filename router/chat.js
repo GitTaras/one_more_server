@@ -1,6 +1,6 @@
 import * as chat from '../controllers/chat-controller';
 import PromiseRouter from 'express-promise-router';
-import guard from '../controllers/guard-controller';
+import guard from '../middlewares/guard-middleware';
 import createValidator from '../utils/create-validator';
 import {postMessageSchema, deleteMessageSchema} from "../utils/validationShemes";
 

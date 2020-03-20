@@ -1,6 +1,6 @@
 import express from 'express';
 import * as user from '../controllers/auth-controller';
-import guard from '../controllers/guard-controller';
+import guard from '../middlewares/guard-middleware';
 import createValidator from '../utils/create-validator';
 import {signInSchema, signUpSchema, editUserSchema} from "../utils/validationShemes";
 
