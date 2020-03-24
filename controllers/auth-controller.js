@@ -7,10 +7,7 @@ import BadReqError from '../utils/errors/BadRequestError';
 
 export const createUser = async (req, res, next) => {
   try {
-    let {password, email} = req.body;
-    req.body.password = await bcrypt.hash(password, await bcrypt.genSalt(8));
-    const user = new Users(req.body);
-    const newUser = await user.save();
+    const newUser = await Users.create(req.body);
     const token = await jwt.sign({_id: newUser.id}, KEY_TOKEN, {expiresIn: expiresToken});
 
     res.send({token, user: newUser.toJSON()});
@@ -43,8 +40,8 @@ export const login = async (req, res, next) => {
   try {
     const {email, password} = req.body;
     const user = await Users.findOne({email}, null);
+    const isEqualsPasswords = await user.isEqualsPasswords(password);
 
-    const isEqualsPasswords = await bcrypt.compare(password, user.password);
     if (!isEqualsPasswords) {
       return next(new BadReqError("wrong email or password"));
     }
@@ -53,7 +50,6 @@ export const login = async (req, res, next) => {
 
     res.send({token: newToken, user: user.toJSON()});
   } catch (err) {
-    console.log(err);
     next(new BadReqError("User not found"))
   }
 };

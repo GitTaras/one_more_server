@@ -7,6 +7,17 @@ export const postMessageSchema = Yup.object().shape({
     .required('type message'),
 });
 
+export const usersAutocompleteSchema = Yup.object().shape({
+  limit: Yup.number().transform(value => parseInt(value, 10) || 15).min(1).max(30).default(15),
+  name: Yup.string().strict().default(''),
+});
+
+export const getMessagesSchema = Yup.object().shape({
+  limit: Yup.number().min(10).max(30).default(15),
+  page: Yup.number().min(1).default(1),
+  // hashtag: Yup.mixed().default([]),
+});
+
 export const deleteMessageSchema = Yup.object().shape({
   id: Yup.string()
     .trim()

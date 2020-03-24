@@ -11,7 +11,11 @@ const MessageSchema = mongoose.Schema(
     },
     message: {
       type: String,
-        required: true,
+      required: true,
+    },
+    hashtags: {
+      type: [Schema.Types.String],
+      default: []
     },
   },
   { timestamps: { createdAt: true } },

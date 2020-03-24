@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import mongoosePaginate from "mongoose-paginate";
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 
@@ -16,6 +16,11 @@ const UserSchema = mongoose.Schema(
       minlength: 2,
       maxlength: 16,
       required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
     },
     email: {
       type: String,
@@ -48,7 +53,19 @@ UserSchema.set('toJSON', {
     }
 });
 
-class User {}
+class User {
+  static async create(userData) {
+    userData.username = `${userData.firstName} ${userData.lastName}`;
+    userData.password = await bcrypt.hash(userData.password, await bcrypt.genSalt(8));
+    const user = new this(userData);
+    return await user.save();
+  }
+
+  async isEqualsPasswords(password) {
+    return await bcrypt.compare(password, this.password);
+  }
+}
+
 UserSchema.loadClass(User);
 
 
