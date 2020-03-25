@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
+import crypto from 'crypto';
 
 const Schema = mongoose.Schema;
 
@@ -44,6 +45,8 @@ const UserSchema = mongoose.Schema(
 UserSchema.set('toJSON', {
     virtuals: true,
     transform: function (doc, ret) {
+      const hash = crypto.createHash('md5').update(ret.email).digest("hex");
+      ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
       delete ret.createdAt;
       delete ret.updatedAt;
       delete ret.password;
