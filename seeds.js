@@ -19,6 +19,7 @@ const init = async () => {
     }
     let result = await Messages.insertMany(items);
     console.log('wrote random data to db...');
+    process.exit();
   } catch (e) {
     console.log(e);
   }
