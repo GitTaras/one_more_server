@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const UserSchema = mongoose.Schema(
   {
@@ -36,24 +36,24 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }]
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }],
   },
   { timestamps: { createdAt: true } },
-  { versionKey: false },
+  { versionKey: false }
 );
 
 UserSchema.set('toJSON', {
-    virtuals: true,
-    transform: function (doc, ret) {
-      const hash = crypto.createHash('md5').update(ret.email).digest("hex");
-      ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
-      delete ret.createdAt;
-      delete ret.updatedAt;
-      delete ret.password;
-      delete ret.__v;
-      delete ret._id;
-      delete ret.messages;
-    }
+  virtuals: true,
+  transform: function (doc, ret) {
+    const hash = crypto.createHash('md5').update(ret.email).digest('hex');
+    ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    delete ret.password;
+    delete ret.__v;
+    delete ret._id;
+    delete ret.messages;
+  },
 });
 
 class User {
@@ -70,6 +70,5 @@ class User {
 }
 
 UserSchema.loadClass(User);
-
 
 export default mongoose.model('Users', UserSchema);

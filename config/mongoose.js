@@ -1,20 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const path = 'mongodb://localhost/twitter';
 
 let db = null;
 
 export default (async () => {
   try {
-    if(!db) {
-      db = await mongoose.connect(path, {useNewUrlParser: true,});
+    if (!db) {
+      db = await mongoose.connect(path, { useNewUrlParser: true });
       console.log('DB connection success');
       db.set('debug', true);
       return db;
     }
     return db;
-
   } catch (e) {
-    console.log('can\'t connect to db, fuck out from here' ,e);
+    console.log("can't connect to db, fuck out from here", e);
     process.exit(1);
   }
 })();

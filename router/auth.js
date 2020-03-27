@@ -2,7 +2,7 @@ import express from 'express';
 import * as user from '../controllers/auth-controller';
 import guard from '../middlewares/guard-middleware';
 import createValidator from '../utils/create-validator';
-import {signInSchema, signUpSchema, editUserSchema} from "../utils/validationShemes";
+import { signInSchema, signUpSchema, editUserSchema } from '../utils/validationShemes';
 
 const router = express.Router();
 

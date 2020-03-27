@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const MessageSchema = mongoose.Schema(
   {
     author: {
-      type: Schema.Types.ObjectId, ref: 'Users',
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
       required: true,
     },
     message: {
@@ -15,12 +16,12 @@ const MessageSchema = mongoose.Schema(
     },
     hashtags: {
       type: [Schema.Types.String],
-      default: []
+      default: [],
     },
   },
   { timestamps: { createdAt: true } },
   { versionKey: false },
-  {virtual: true}
+  { virtual: true }
 );
 
 MessageSchema.set('toJSON', {
@@ -30,7 +31,7 @@ MessageSchema.set('toJSON', {
     delete ret.updatedAt;
     delete ret.__v;
     delete ret._id;
-  }
+  },
 });
 
 MessageSchema.plugin(mongoosePaginate);

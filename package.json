@@ -6,7 +6,10 @@
   "scripts": {
     "seeds": "babel-node ./seeds.js",
     "babel-node": "babel-node",
-    "start": "nodemon --exec npm run babel-node ./index.js"
+    "start": "nodemon --exec npm run babel-node ./index.js",
+    "lint": "eslint -c './eslintrc.json' ./",
+    "lint:fix": "eslint ./ --fix",
+    "format": "prettier --write \"**/*.+(js|jsx)\""
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -30,11 +33,23 @@
     "@babel/plugin-transform-regenerator": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "babel-plugin-dynamic-import-node": "^2.3.0",
-    "nodemon": "^1.17.1"
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^1.17.1",
+    "prettier": "^2.0.2"
   },
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "singleQuote": true,
+    "printWidth": 100
   }
 }
