@@ -6,7 +6,7 @@ import { postMessageSchema, deleteMessageSchema } from '../utils/validationSheme
 
 const router = PromiseRouter();
 
-router.get('/', guard, posts.getAllMessages);
+router.get('/', guard, posts.getMessages);
 router.post('/', guard, createValidator(postMessageSchema), posts.postMessage);
 router.delete('/:id', guard, createValidator(null, deleteMessageSchema), posts.deleteMessage);
 

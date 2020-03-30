@@ -6,7 +6,7 @@ export const postMessageSchema = Yup.object().shape({
 
 export const usersAutocompleteSchema = Yup.object().shape({
   limit: Yup.number()
-    .transform((value) => parseInt(value, 10) || 15)
+    // .transform((value) => parseInt(value, 10) || 15)
     .min(1)
     .max(30)
     .default(15),
@@ -24,12 +24,12 @@ export const deleteMessageSchema = Yup.object().shape({
 });
 
 export const signUpSchema = Yup.object().shape({
-  firstName: Yup.string()
+  fullName: Yup.string()
     .required()
     .trim()
     .min(2, 'min length is 2 charts')
-    .max(30, 'max length is 30 charts'),
-  lastName: Yup.string()
+    .max(50, 'max length is 50 charts'),
+  username: Yup.string()
     .required()
     .trim()
     .min(2, 'min length is 2 charts')
@@ -48,16 +48,11 @@ export const signUpSchema = Yup.object().shape({
 });
 
 export const editUserSchema = Yup.object().shape({
-  firstName: Yup.string()
+  fullName: Yup.string()
     .required()
     .trim()
     .min(2, 'min length is 2 charts')
-    .max(30, 'max length is 30 charts'),
-  lastName: Yup.string()
-    .required()
-    .trim()
-    .min(2, 'min length is 2 charts')
-    .max(30, 'max length is 30 charts'),
+    .max(50, 'max length is 50 charts'),
   email: Yup.string()
     .required()
     .email()

@@ -1,25 +1,23 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
 const { Schema } = mongoose;
 
 const UserSchema = mongoose.Schema(
   {
-    firstName: {
+    fullName: {
       type: String,
       minlength: 2,
-      maxlength: 30,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      minlength: 2,
-      maxlength: 30,
+      maxlength: 50,
       required: true,
     },
     username: {
       type: String,
+      minlength: 2,
+      maxlength: 30,
+      index: true,
+      unique: true,
+      dropDups: true,
       required: true,
       trim: true,
     },
@@ -36,7 +34,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }],
+    // messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }],
   },
   { timestamps: { createdAt: true } },
   { versionKey: false }
@@ -47,27 +45,12 @@ UserSchema.set('toJSON', {
   transform: function (doc, ret) {
     const hash = crypto.createHash('md5').update(ret.email).digest('hex');
     ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
-    delete ret.createdAt;
-    delete ret.updatedAt;
-    delete ret.password;
-    delete ret.__v;
     delete ret._id;
-    delete ret.messages;
+    delete ret.password;
   },
 });
 
-class User {
-  static async create(userData) {
-    userData.username = `${userData.firstName} ${userData.lastName}`;
-    userData.password = await bcrypt.hash(userData.password, await bcrypt.genSalt(8));
-    const user = new this(userData);
-    return await user.save();
-  }
-
-  async isEqualsPasswords(password) {
-    return await bcrypt.compare(password, this.password);
-  }
-}
+class User {}
 
 UserSchema.loadClass(User);
 

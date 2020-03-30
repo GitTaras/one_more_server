@@ -1,13 +1,15 @@
-import Users from '../models/User';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import Users from '../models/User';
 import { KEY_TOKEN, expiresToken } from '../utils/constants';
 import NotFoundError from '../utils/errors/NotFoundError';
 import BadReqError from '../utils/errors/BadRequestError';
 
 export const createUser = async (req, res, next) => {
   try {
-    const newUser = await Users.create(req.body);
+    const userData = req.body;
+    userData.password = await bcrypt.hash(userData.password, await bcrypt.genSalt(8));
+    const newUser = await Users.create(userData);
     const token = await jwt.sign({ _id: newUser.id }, KEY_TOKEN, { expiresIn: expiresToken });
 
     res.send({ token, user: newUser.toJSON() });
@@ -43,7 +45,7 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findOne({ email }, null);
-    const isEqualsPasswords = await user.isEqualsPasswords(password);
+    const isEqualsPasswords = await bcrypt.compare(password, user.password);
 
     if (!isEqualsPasswords) {
       return next(new BadReqError('wrong email or password'));

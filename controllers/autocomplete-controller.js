@@ -3,17 +3,15 @@ import BadReqError from '../utils/errors/BadRequestError';
 
 export const getUsersAutocomplete = async (req, res, next) => {
   try {
-    // console.log(typeof req.query.limit);
-    // here is string ? wtf
-    // and this query will falling down ...oh my fucking London Bridge ...
+    const { limit = 15 } = req.query.limit;
+    const regexp = new RegExp(`^${req.query.name}`, 'ig');
     const users = await Users.find(
-      { username: new RegExp(`^${req.query.name}`, 'ig') },
-      { username: 1, email: 1 },
-      { limit: parseInt(req.query.limit, 10) }
+      { $or: [{ username: regexp }, { fullName: regexp }] },
+      { username: 1, email: 1, id: 1, fullName: 1 },
+      { limit: limit }
     );
     res.send(users);
   } catch (err) {
-    console.log(err);
     next(new BadReqError());
   }
 };

@@ -27,9 +27,6 @@ const MessageSchema = mongoose.Schema(
 MessageSchema.set('toJSON', {
   virtuals: true,
   transform: function (doc, ret) {
-    delete ret.createdAt;
-    delete ret.updatedAt;
-    delete ret.__v;
     delete ret._id;
   },
 });
@@ -37,6 +34,23 @@ MessageSchema.set('toJSON', {
 MessageSchema.plugin(mongoosePaginate);
 
 class Message {}
+
+function autoPopulate() {
+  this.populate('author', { username: true, email: true, fullName: true });
+}
+
+MessageSchema.pre('find', autoPopulate);
+MessageSchema.pre('findOne', autoPopulate);
+
+MessageSchema.post('save', function(doc, next) {
+  doc
+    .populate('author', { username: true, email: true, fullName: true })
+    .execPopulate()
+    .then(function () {
+      next();
+    });
+});
+
 MessageSchema.loadClass(Message);
 
 export default mongoose.model('Messages', MessageSchema);

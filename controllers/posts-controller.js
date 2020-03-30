@@ -1,16 +1,15 @@
 import Messages from '../models/Message';
 import BadReqError from '../utils/errors/BadRequestError';
-import _ from 'lodash';
 import mongoose from '../config/mongoose';
 
-export const getAllMessages = async (req, res, next) => {
+export const getMessages = async (req, res, next) => {
   try {
-    let page = parseInt(_.get(req, 'query.page', 1), 10);
+    let { page = 1 } = req.query;
     const messages = await Messages.paginate(
       { author: req.currentUser.id },
       { sort: { _id: -1 }, page, limit: 15 }
     );
-    messages.nextPage = messages.page + 1;
+    messages.nextPage = +messages.page + 1;
     res.send(messages);
   } catch (err) {
     next(new BadReqError());
@@ -20,8 +19,7 @@ export const getAllMessages = async (req, res, next) => {
 export const postMessage = async (req, res, next) => {
   try {
     const { message } = req.body;
-    const newMessage = new Messages({ author: req.currentUser.id, message });
-    await newMessage.save();
+    const newMessage = await Messages.create({ author: req.currentUser.id, message });
     res.send(newMessage).status(200);
   } catch (err) {
     next(new BadReqError());
@@ -33,7 +31,7 @@ export const deleteMessage = async (req, res, next) => {
     const { id } = req.params;
     const db = await mongoose;
 
-    let result = await Messages.findOneAndDelete({
+    const result = await Messages.findOneAndDelete({
       _id: new db.Types.ObjectId(id),
       author: req.currentUser.id,
     });
