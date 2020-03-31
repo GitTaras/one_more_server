@@ -5,4 +5,8 @@ login with:
 >email: test.drive@test.drive\
 >password: 123456
  
+ or 
+>john.dou@gmail.com
+>123456
+ 
 * `npm run start` to run server
