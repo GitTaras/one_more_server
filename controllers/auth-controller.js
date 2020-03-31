@@ -15,7 +15,7 @@ export const createUser = async (req, res, next) => {
     res.send({ token, user: newUser.toJSON() });
   } catch (err) {
     if (err.code === 11000) {
-      return next(new BadReqError('Email already exists'));
+      return next(new BadReqError('Email or Username already exists'));
     }
     next(new BadReqError());
   }
