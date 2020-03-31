@@ -5,20 +5,16 @@ import mongoose from '../config/mongoose';
 
 export const getMessages = async (req, res, next) => {
   try {
-    let { page = 1, username } = req.query;
+    const { page = 1, username } = req.query;
     let author = '';
 
     if (username) {
       author = await Users.findOne({ username }, { id: 1 });
     } else {
-
       author = req.currentUser.id;
     }
 
-    const messages = await Messages.paginate(
-      { author },
-      { sort: { _id: -1 }, page, limit: 15 }
-    );
+    const messages = await Messages.paginate({ author }, { sort: { _id: -1 }, page, limit: 15 });
     messages.nextPage = +messages.page + 1;
     res.send(messages);
   } catch (err) {

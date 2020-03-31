@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const path = 'mongodb://localhost/twitter';
 
 let db = null;

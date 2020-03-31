@@ -3,7 +3,7 @@ import mongoosePaginate from 'mongoose-paginate';
 
 const { Schema } = mongoose;
 
-const MessageSchema = mongoose.Schema(
+const MessageSchema = Schema(
   {
     author: {
       type: Schema.Types.ObjectId,
@@ -42,7 +42,7 @@ function autoPopulate() {
 MessageSchema.pre('find', autoPopulate);
 MessageSchema.pre('findOne', autoPopulate);
 
-MessageSchema.post('save', function(doc, next) {
+MessageSchema.post('save', function (doc, next) {
   doc
     .populate('author', { username: true, email: true, fullName: true })
     .execPopulate()

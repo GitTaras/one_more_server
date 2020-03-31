@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 const { Schema } = mongoose;
 
-const UserSchema = mongoose.Schema(
+const UserSchema = Schema(
   {
     fullName: {
       type: String,

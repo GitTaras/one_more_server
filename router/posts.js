@@ -1,5 +1,5 @@
-import * as posts from '../controllers/posts-controller';
 import PromiseRouter from 'express-promise-router';
+import * as posts from '../controllers/posts-controller';
 import guard from '../middlewares/guard-middleware';
 import createValidator from '../utils/create-validator';
 import { postMessageSchema, deleteMessageSchema } from '../utils/validationShemes';
