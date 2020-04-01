@@ -10,6 +10,7 @@ export default (body, params, query) => async (req, res, next) => {
 
     next();
   } catch (err) {
+    console.log(err);
     const errObj = err.inner.reduce(
       (acc, err) => ({ ...acc, [err.path]: [...(acc[err.path] || []), ...err.errors] }),
       {}

@@ -15,9 +15,9 @@ export const store = async (req, res, next) => {
 
     res.json({ token, user });
   } catch (err) {
-    if (err.code === 11000) {
-      return next(new BadReqError('Email or Username already exists'));
-    }
+    // if (err.code === 11000) {
+    //   return next(new BadReqError('Email or Username already exists'));
+    // }
     next(new BadReqError());
   }
 };

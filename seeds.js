@@ -41,7 +41,7 @@ const init = async () => {
       testdriveUser.posts.push(testdrivePost.id);
       johndouUser.posts.push(johnPost.id);
     }
-    let result = await Posts.insertMany(items);
+    await Posts.insertMany(items);
     await testdriveUser.save();
     await johndouUser.save();
     console.log('wrote random data to db...');
