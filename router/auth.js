@@ -1,14 +1,13 @@
-import express from 'express';
-import * as user from '../controllers/auth-controller';
+import PromiseRouter from 'express-promise-router';
+import * as users from '../controllers/users-controller';
 import guard from '../middlewares/guard-middleware';
-import createValidator from '../utils/create-validator';
-import { signInSchema, signUpSchema, editUserSchema } from '../utils/validationShemes';
+import createValidator from '../validation/create-validator';
+import { signInSchema, signUpSchema } from '../validation/validationSchemas';
 
-const router = express.Router();
+const router = PromiseRouter();
 
-router.post('/signin', createValidator(signInSchema), user.login);
-router.post('/signup', createValidator(signUpSchema), user.createUser);
-router.get('/get-user', guard, user.getCurrentUser);
-router.put('/', guard, createValidator(editUserSchema), user.update);
+router.post('/sign-in', createValidator(signInSchema), users.signIn);
+router.post('/sign-up', createValidator(signUpSchema), users.store);
+router.get('/get-user', guard, users.show);
 
 export default router;

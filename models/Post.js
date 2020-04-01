@@ -3,7 +3,7 @@ import mongoosePaginate from 'mongoose-paginate';
 
 const { Schema } = mongoose;
 
-const MessageSchema = Schema(
+const PostSchema = Schema(
   {
     author: {
       type: Schema.Types.ObjectId,
@@ -24,25 +24,25 @@ const MessageSchema = Schema(
   { virtual: true }
 );
 
-MessageSchema.set('toJSON', {
+PostSchema.set('toJSON', {
   virtuals: true,
   transform: function (doc, ret) {
     delete ret._id;
   },
 });
 
-MessageSchema.plugin(mongoosePaginate);
+PostSchema.plugin(mongoosePaginate);
 
-class Message {}
+class Post {}
 
 function autoPopulate() {
   this.populate('author', { username: true, email: true, fullName: true });
 }
 
-MessageSchema.pre('find', autoPopulate);
-MessageSchema.pre('findOne', autoPopulate);
+PostSchema.pre('find', autoPopulate);
+PostSchema.pre('findOne', autoPopulate);
 
-MessageSchema.post('save', function (doc, next) {
+PostSchema.post('save', function (doc, next) {
   doc
     .populate('author', { username: true, email: true, fullName: true })
     .execPopulate()
@@ -51,6 +51,6 @@ MessageSchema.post('save', function (doc, next) {
     });
 });
 
-MessageSchema.loadClass(Message);
+PostSchema.loadClass(Post);
 
-export default mongoose.model('Messages', MessageSchema);
+export default mongoose.model('Posts', PostSchema);

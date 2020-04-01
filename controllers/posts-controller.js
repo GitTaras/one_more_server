@@ -1,49 +1,47 @@
-import Messages from '../models/Message';
+import mongoose from 'mongoose';
+import Posts from '../models/Post';
 import Users from '../models/User';
 import BadReqError from '../utils/errors/BadRequestError';
-import mongoose from '../config/mongoose';
 
-export const getMessages = async (req, res, next) => {
+export const show = async (req, res, next) => {
   try {
-    const { page = 1, username } = req.query;
-    let author = '';
+    const { page = 1 } = req.query;
+    const author = req.params.username
+      ? (await Users.findOne({ username: req.params.username })).id
+      : req.user.id;
 
-    if (username) {
-      author = await Users.findOne({ username }, { id: 1 });
-    } else {
-      author = req.currentUser.id;
-    }
-
-    const messages = await Messages.paginate({ author }, { sort: { _id: -1 }, page, limit: 15 });
-    messages.nextPage = +messages.page + 1;
-    res.send(messages);
+    const posts = await Posts.paginate({ author }, { sort: { _id: -1 }, page, limit: 15 });
+    posts.nextPage = +posts.page + 1;
+    res.json(posts);
   } catch (err) {
     next(new BadReqError());
   }
 };
 
-export const postMessage = async (req, res, next) => {
+export const store = async (req, res, next) => {
   try {
     const { message } = req.body;
-    const newMessage = await Messages.create({ author: req.currentUser.id, message });
-    res.send(newMessage).status(200);
+    const post = await Posts.create({ author: req.user.id, message });
+    await req.user.posts.push(post.id);
+
+    res.json(post).status(200);
   } catch (err) {
     next(new BadReqError());
   }
 };
 
-export const deleteMessage = async (req, res, next) => {
+export const destroy = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const db = await mongoose;
 
-    const result = await Messages.findOneAndDelete({
-      _id: new db.Types.ObjectId(id),
-      author: req.currentUser.id,
+    const result = await Posts.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(id),
+      author: req.user.id,
     });
     if (!result) {
       return next(new BadReqError());
     }
+
     res.sendStatus(200);
   } catch (err) {
     next(new BadReqError());

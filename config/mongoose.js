@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const path = 'mongodb://localhost/twitter';
+const path = process.env.DB_PATH || 'mongodb://localhost/twitter';
 
 let db = null;
 

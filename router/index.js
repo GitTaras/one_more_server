@@ -1,12 +1,12 @@
 import PromiseRouter from 'express-promise-router';
 import posts from './posts';
 import auth from './auth';
-import autocomplete from './autocomplete';
+import users from './users';
 
 const router = PromiseRouter();
 
 router.use('/posts', posts);
 router.use('/auth', auth);
-router.use('/autocomplete', autocomplete);
+router.use('/users', users);
 
 export default router;

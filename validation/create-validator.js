@@ -1,4 +1,4 @@
-import BadReqError from './errors/BadRequestError';
+import BadReqError from '../utils/errors/BadRequestError';
 
 export default (body, params, query) => async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ export default (body, params, query) => async (req, res, next) => {
 
     next();
   } catch (err) {
-    let errObj = err.inner.reduce(
+    const errObj = err.inner.reduce(
       (acc, err) => ({ ...acc, [err.path]: [...(acc[err.path] || []), ...err.errors] }),
       {}
     );

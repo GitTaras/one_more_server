@@ -5,19 +5,12 @@ const { Schema } = mongoose;
 
 const UserSchema = Schema(
   {
-    fullName: {
-      type: String,
-      minlength: 2,
-      maxlength: 50,
-      required: true,
-    },
     username: {
       type: String,
       minlength: 2,
       maxlength: 30,
       index: true,
       unique: true,
-      dropDups: true,
       required: true,
       trim: true,
     },
@@ -25,7 +18,6 @@ const UserSchema = Schema(
       type: String,
       minlength: 6,
       maxlength: 30,
-      dropDups: true,
       index: true,
       unique: true,
       required: true,
@@ -34,7 +26,7 @@ const UserSchema = Schema(
       type: String,
       required: true,
     },
-    // messages: [{ type: Schema.Types.ObjectId, ref: 'Messages' }],
+    posts: [{ type: Schema.Types.ObjectId, ref: 'Posts' }],
   },
   { timestamps: { createdAt: true } },
   { versionKey: false }

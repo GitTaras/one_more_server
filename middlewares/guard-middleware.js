@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { KEY_TOKEN } from '../utils/constants';
 import Users from '../models/User';
 import ApplicationError from '../utils/errors/ApplicationError';
 import mongoose from '../config/mongoose';
+
+const { KEY_TOKEN } = process.env;
 
 export default async (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ export default async (req, res, next) => {
         return next(new ApplicationError('Unauthorized', 401));
       }
 
-      req.currentUser = user;
+      req.user = user;
       req.token = token;
 
       return next();
