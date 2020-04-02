@@ -11,10 +11,14 @@ export const usersAutocompleteSchema = Yup.object().shape({
   name: Yup.string().strict().default(''),
 });
 
+export const hashTagsAutocompleteSchema = Yup.object().shape({
+  limit: Yup.number().min(1).max(30).default(15),
+  name: Yup.string().strict().default(''),
+});
+
 export const getPostsSchema = Yup.object().shape({
   limit: Yup.number().min(10).max(30).default(15),
   page: Yup.number().min(1).default(1),
-  // hashtag: Yup.mixed().default([]),
 });
 
 export const deletePostSchema = Yup.object().shape({
