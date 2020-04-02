@@ -18,6 +18,7 @@ const PostSchema = Schema(
       type: [Schema.Types.String],
       default: [],
     },
+    //mentions:
   },
   { timestamps: { createdAt: true } },
   { versionKey: false },
@@ -34,6 +35,11 @@ PostSchema.set('toJSON', {
 PostSchema.plugin(mongoosePaginate);
 
 class Post {}
+
+//todo
+// remove hooks
+// add method for parsing and saving hashtags
+// add mentions like map(String "@username", ObjectId)
 
 function autoPopulate() {
   this.populate('author', { username: true, email: true, fullName: true });

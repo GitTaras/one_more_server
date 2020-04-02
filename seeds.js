@@ -29,13 +29,16 @@ const init = async () => {
     const johndouUser = await Users(johndouUserData);
     const items = [];
     for (let i = 0; i < 123; i++) {
+      const tag = i%2 ? "one" : "two";
       const testdrivePost = new Posts({
-        message: `${i} ${faker.lorem.sentences()} ${i}`,
+        message: `${i} #${tag} ${faker.lorem.sentences()} ${i}`,
         author: testdriveUser.id,
+        hashtags: [tag],
       });
       const johnPost = new Posts({
-        message: `${i} ${faker.lorem.sentences()} ${i}`,
+        message: `${i} #${tag} ${faker.lorem.sentences()} ${i}`,
         author: johndouUser.id,
+        hashtags: [tag],
       });
       items.push(testdrivePost, johnPost);
       testdriveUser.posts.push(testdrivePost.id);

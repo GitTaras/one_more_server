@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import Users from '../models/User';
 import mongoose from 'mongoose';
+import Users from '../models/User';
 
 export const postSchema = Yup.object().shape({
   message: Yup.string().max(250, 'max length is 250 charts').required('type message'),
@@ -19,6 +19,8 @@ export const hashTagsAutocompleteSchema = Yup.object().shape({
 export const getPostsSchema = Yup.object().shape({
   limit: Yup.number().min(10).max(30).default(15),
   page: Yup.number().min(1).default(1),
+  username: Yup.string().default(''),
+  hash_tag: Yup.string().default(''),
 });
 
 export const deletePostSchema = Yup.object().shape({
@@ -73,7 +75,6 @@ export const editUserSchema = Yup.object().shape({
           _id: { $ne: mongoose.Types.ObjectId(this.parent.id) },
         })
       ) {
-        console.log('here am i');
         return this.createError({
           path: this.path,
           message: 'username already taken',

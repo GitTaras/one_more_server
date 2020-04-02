@@ -4,19 +4,22 @@ import Users from '../models/User';
 import BadReqError from '../utils/errors/BadRequestError';
 
 export const show = async (req, res) => {
-  const { page = 1, hash_tags } = req.query;
+  const { page = 1, hash_tag = undefined } = req.query;
+  const { username } = req.params;
 
   const query = {};
 
-  if (hash_tags.length) {
-    query.hashtags = { $in: hash_tags };
+  if (hash_tag) {
+    query.hashtags = hash_tag;
   }
 
-  const author = req.params.username
-    ? (await Users.findOne({ username: req.params.username })).id
-    : req.user.id;
+  if (username) {
+    query.author = req.params.username
+      ? (await Users.findOne({ username: req.params.username })).id
+      : req.user.id;
+  }
 
-  const posts = await Posts.paginate({ author }, { sort: { _id: -1 }, page, limit: 15 });
+  const posts = await Posts.paginate(query, { sort: { _id: -1 }, page, limit: 15 });
   posts.nextPage = +posts.page + 1;
   res.json(posts);
 };
@@ -47,11 +50,4 @@ export const destroy = async (req, res) => {
     req.user.posts.splice(index, 1);
     await req.user.save();
   }
-};
-
-export const autocomplete = async (req, res) => {
-  const { limit = 15 } = req.query.limit;
-  const regexp = new RegExp(`^${req.query.hashTag}`, 'ig');
-  const hashtags = await Hashtag.find({ hashtag: regexp }, { hashtag: true }, { limit });
-  res.json(hashtags);
 };
