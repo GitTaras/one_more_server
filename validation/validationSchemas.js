@@ -4,6 +4,7 @@ import Users from '../models/User';
 
 export const postSchema = Yup.object().shape({
   message: Yup.string().max(250, 'max length is 250 charts').required('type message'),
+  hashtags: Yup.mixed().default([]),
 });
 
 export const usersAutocompleteSchema = Yup.object().shape({

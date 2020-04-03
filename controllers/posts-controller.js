@@ -25,8 +25,7 @@ export const show = async (req, res) => {
 };
 
 export const store = async (req, res) => {
-  const { message } = req.body;
-  const post = await Posts.create({ author: req.user.id, message });
+  const post = await Posts.create({ author: req.user.id, ...req.body });
   await req.user.posts.push(post.id);
   await req.user.save();
 
