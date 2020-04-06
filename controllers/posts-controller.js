@@ -29,6 +29,8 @@ export const store = async (req, res) => {
   await req.user.posts.push(post.id);
   await req.user.save();
 
+  req.body.hashtags.length && (await Posts.saveHashTags(req.body.hashtags));
+
   res.json(post).status(200);
 };
 

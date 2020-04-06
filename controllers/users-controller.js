@@ -15,6 +15,10 @@ export const store = async (req, res) => {
 };
 
 export const update = async (req, res) => {
+  if (req.body.password) {
+    req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(8));
+  }
+
   const user = await Users.findOneAndUpdate({ _id: req.user.id }, req.body, {
     new: true,
   });
@@ -33,7 +37,7 @@ export const signIn = async (req, res) => {
   if (!user) throw new BadReqError('wrong email or password');
 
   const isEqualsPasswords = await bcrypt.compare(password, user.password);
-  if (!isEqualsPasswords) throw BadReqError('wrong email or password');
+  if (!isEqualsPasswords) throw new BadReqError('wrong email or password');
 
   const newToken = await jwt.sign({ _id: user.id }, KEY_TOKEN, { expiresIn: EXPIRES_TOKEN });
 
@@ -55,10 +59,6 @@ export const show = async (req, res) => {
 export const autocomplete = async (req, res) => {
   const { limit = 15 } = req.query.limit;
   const regexp = new RegExp(`^${req.query.name}`, 'ig');
-  const users = await Users.find(
-    { username: regexp },
-    { username: 1, email: 1, id: 1 },
-    { limit }
-  );
+  const users = await Users.find({ username: regexp }, { username: 1, email: 1, id: 1 }, { limit });
   res.json(users);
 };

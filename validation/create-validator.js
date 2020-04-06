@@ -1,5 +1,5 @@
 export default (body, params, query) => async (req, res, next) => {
-  if (body) await body.validate(req.body, { abortEarly: false });
+  if (body) await body.validate({ ...req.body, user: req.user }, { abortEarly: false });
 
   if (params) await params.validate(req.params, { abortEarly: false });
 

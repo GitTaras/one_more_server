@@ -6,7 +6,7 @@ login with:
 >password: 123456
  
  or 
->john.dou@gmail.com
+>john.dou@gmail.com\
 >123456
  
 * `npm run start` to run server

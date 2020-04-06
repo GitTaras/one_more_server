@@ -2,7 +2,7 @@ import PromiseRouter from 'express-promise-router';
 import * as hashtags from '../controllers/hashtags-controller';
 import guard from '../middlewares/guard-middleware';
 import createValidator from '../validation/create-validator';
-import { hashTagsAutocompleteSchema} from '../validation/validationSchemas';
+import { hashTagsAutocompleteSchema } from '../validation/validationSchemas';
 
 const router = PromiseRouter();
 
@@ -12,3 +12,5 @@ router.get(
   createValidator(null, null, hashTagsAutocompleteSchema),
   hashtags.autocomplete
 );
+
+export default router;

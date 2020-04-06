@@ -5,11 +5,11 @@ export default (err, req, res, next) => {
   if (err instanceof ApplicationError) {
     res.status(err.status).json(err.message);
   } else if (err.name === 'ValidationError') {
-    const error = err.inner.reduce(
+    const errors = err.inner.reduce(
       (acc, err) => ({ ...acc, [err.path]: [...(acc[err.path] || []), ...err.errors] }),
       {}
     );
-    res.status(400).json({ message: err.message, error });
+    res.status(400).json({ message: err.message, errors });
   } else if (err.name === 'TokenExpiredError') {
     res.status(401).json({ message: err.message });
   } else {

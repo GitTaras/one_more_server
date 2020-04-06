@@ -7,6 +7,7 @@ const HashTagSchema = Schema(
     hashtag: {
       type: Schema.Types.String,
       required: true,
+      index: true,
       unique: true,
     },
   },

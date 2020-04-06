@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
+import HashTags from './HashTag';
 
 const { Schema } = mongoose;
 
@@ -34,7 +35,16 @@ PostSchema.set('toJSON', {
 
 PostSchema.plugin(mongoosePaginate);
 
-class Post {}
+class Post {
+  static async saveHashTags(hashtags) {
+    const existingHashtagsObj = await HashTags.find({ hashtag: { $in: hashtags } });
+    const existingHashtags = existingHashtagsObj.map(({ hashtag }) => hashtag);
+    const unexistingHashtags = hashtags.filter(
+      (hashtag) => existingHashtags.includes(hashtag) === false
+    );
+    await unexistingHashtags.map(async (hashtag) => await HashTags.create({ hashtag }));
+  }
+}
 
 //todo
 // remove hooks

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import db from './config/mongoose';
 import Users from './models/User';
 import Posts from './models/Post';
+import HashTags from './models/HashTag';
 
 const init = async () => {
   try {
@@ -45,6 +46,8 @@ const init = async () => {
       johndouUser.posts.push(johnPost.id);
     }
     await Posts.insertMany(items);
+    await HashTags.create({ hashtag: 'one' });
+    await HashTags.create({ hashtag: 'two' });
     await testdriveUser.save();
     await johndouUser.save();
     console.log('wrote random data to db...');

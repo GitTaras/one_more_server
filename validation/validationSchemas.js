@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import Users from '../models/User';
 
@@ -14,15 +15,15 @@ export const usersAutocompleteSchema = Yup.object().shape({
 
 export const hashTagsAutocompleteSchema = Yup.object().shape({
   limit: Yup.number().min(1).max(30).default(15),
-  name: Yup.string().strict().default(''),
+  hashtag: Yup.string().strict().default(''),
 });
 
-export const getPostsSchema = Yup.object().shape({
-  limit: Yup.number().min(10).max(30).default(15),
-  page: Yup.number().min(1).default(1),
-  username: Yup.string().default(''),
-  hash_tag: Yup.string().default(''),
-});
+// export const getPostsSchema = Yup.object().shape({
+//   limit: Yup.number().min(10).max(30).default(15),
+//   page: Yup.number().min(1).default(1),
+//   username: Yup.string().default(''),
+//   hash_tag: Yup.string().default(''),
+// });
 
 export const deletePostSchema = Yup.object().shape({
   id: Yup.string().trim().required('missing id'),
@@ -100,7 +101,37 @@ export const editUserSchema = Yup.object().shape({
       }
       return value;
     }),
-  // password: Yup.string().required().trim().min(6, 'min length is 6 charts').max(50, 'max length is 50 charts'),
+});
+
+export const updatePasswordSchema = Yup.object().shape({
+  oldPassword: Yup.string()
+    .required()
+    .trim()
+    .min(6, 'min length is 6 charts')
+    .max(50, 'max length is 50 charts')
+    .test('correct', "old password isn't correct", async function (value) {
+      if (await bcrypt.compare(value, this.parent.user.password)) {
+        return value;
+      }
+      return this.createError({
+        path: this.path,
+        message: "old password isn't correct",
+      });
+    }),
+  password: Yup.string()
+    .required()
+    .trim()
+    .max(50, 'max length is 50 charts')
+    .min(6, 'min length is 6 charts')
+    .test('not the same', 'new password must differ from old', async function (value) {
+      if (await bcrypt.compare(value, this.parent.user.password)) {
+        return this.createError({
+          path: this.path,
+          message: 'new password must differ from old',
+        });
+      }
+      return value;
+    }),
 });
 
 export const signInSchema = Yup.object().shape({
