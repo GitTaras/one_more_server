@@ -9,6 +9,9 @@ import HashTags from './models/HashTag';
 const init = async () => {
   try {
     console.log('Creating fake data...');
+    const con = await db;
+    await con.connection.db.dropDatabase();
+
     const testdriveUserData = {
       username: 'testdrive',
       email: 'test.drive@test.drive',
@@ -50,6 +53,7 @@ const init = async () => {
     await HashTags.create({ hashtag: 'two' });
     await testdriveUser.save();
     await johndouUser.save();
+
     console.log('wrote random data to db...');
     process.exit();
   } catch (e) {
