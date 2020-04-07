@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './dotenv/config';
 import faker from 'faker';
 import bcrypt from 'bcrypt';
 import db from './config/mongoose';
