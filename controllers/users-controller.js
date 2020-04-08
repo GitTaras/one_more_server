@@ -57,8 +57,8 @@ export const show = async (req, res) => {
 };
 
 export const autocomplete = async (req, res) => {
-  const { limit = 15 } = req.query.limit;
-  const regexp = new RegExp(`^${req.query.name}`, 'ig');
-  const users = await Users.find({ username: regexp }, { username: 1, email: 1, id: 1 }, { limit });
+  const limit = 15;
+  const pattern = new RegExp(`^${req.params.name}`, 'ig');
+  const users = await Users.find({ username: pattern }, { username: 1, email: 1, id: 1 }, { limit });
   res.json(users);
 };

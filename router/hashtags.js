@@ -7,7 +7,7 @@ import { hashTagsAutocompleteSchema } from '../validation/validationSchemas';
 const router = PromiseRouter();
 
 router.get(
-  '/autocomplete/',
+  '/autocomplete/:hashtag',
   guard,
   createValidator(null, null, hashTagsAutocompleteSchema),
   hashtags.autocomplete

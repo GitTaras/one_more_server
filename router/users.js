@@ -9,7 +9,7 @@ const router = PromiseRouter();
 router.put('/', guard, createValidator(editUserSchema), users.update);
 
 router.get(
-  '/autocomplete/',
+  '/autocomplete/:name',
   guard,
   createValidator(null, null, usersAutocompleteSchema),
   users.autocomplete
