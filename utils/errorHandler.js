@@ -3,7 +3,7 @@ import ApplicationError from './errors/ApplicationError';
 export default (err, req, res, next) => {
   console.log(err);
   if (err instanceof ApplicationError) {
-    res.status(err.status).json(err.message);
+    res.status(err.status).json({ message: err.message });
   } else if (err.name === 'ValidationError') {
     const errors = err.inner.reduce(
       (acc, err) => ({ ...acc, [err.path]: [...(acc[err.path] || []), ...err.errors] }),

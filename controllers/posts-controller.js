@@ -5,18 +5,19 @@ import BadReqError from '../utils/errors/BadRequestError';
 
 export const show = async (req, res) => {
   const { page = 1, hash_tag = undefined } = req.query;
-  const { username } = req.params;
 
+  const { username } = req.params;
+console.log('username',username);
   const query = {};
 
   if (hash_tag) {
     query.hashtags = hash_tag;
   }
 
-  if (username) {
-    query.author = req.params.username
-      ? (await Users.findOne({ username: req.params.username })).id
-      : req.user.id;
+  if (username && username !== 'all') {
+    query.author = (await Users.findOne({ username: req.params.username }))?.id;
+  } else if (!username && !hash_tag) {
+    query.author = req.user.id;
   }
 
   const posts = await Posts.paginate(query, { sort: { _id: -1 }, page, limit: 15 });
