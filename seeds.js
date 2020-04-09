@@ -1,7 +1,7 @@
 import './dotenv/config';
 import faker from 'faker';
 import bcrypt from 'bcrypt';
-import db from './config/mongoose';
+import db from './database';
 import Users from './models/User';
 import Posts from './models/Post';
 import HashTags from './models/HashTag';

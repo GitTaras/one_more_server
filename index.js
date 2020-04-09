@@ -1,7 +1,7 @@
 import './dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import './config/mongoose';
+import './database';
 import router from './router';
 import errorHandler from './utils/errorHandler';
 
