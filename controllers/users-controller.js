@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import Users from '../models/User';
-import NotFoundError from '../utils/errors/NotFoundError';
 import BadReqError from '../utils/errors/BadRequestError';
 
 const { KEY_TOKEN, EXPIRES_TOKEN } = process.env;
@@ -39,9 +38,9 @@ export const signIn = async (req, res) => {
   const isEqualsPasswords = await bcrypt.compare(password, user.password);
   if (!isEqualsPasswords) throw new BadReqError('wrong email or password');
 
-  const newToken = await jwt.sign({ _id: user.id }, KEY_TOKEN, { expiresIn: EXPIRES_TOKEN });
+  const token = await jwt.sign({ _id: user.id }, KEY_TOKEN, { expiresIn: EXPIRES_TOKEN });
 
-  res.json({ token: newToken, user });
+  res.json({ token, user });
 };
 
 export const show = async (req, res) => {
@@ -49,14 +48,10 @@ export const show = async (req, res) => {
     expiresIn: EXPIRES_TOKEN,
   });
 
-  if (!token) {
-    throw new NotFoundError();
-  }
-
-  res.json({ token: req.token, user: req.user });
+  res.json({ token, user: req.user });
 };
 
-export const autocomplete = async (req, res) => {
+export const autocompleteUsername = async (req, res) => {
   const limit = 15;
   const pattern = new RegExp(`^${req.params.name}`, 'ig');
   const users = await Users.find({ username: pattern }, { username: 1, email: 1, id: 1 }, { limit });

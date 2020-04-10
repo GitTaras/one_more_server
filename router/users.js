@@ -12,7 +12,7 @@ router.get(
   '/autocomplete/:name',
   guard,
   createValidator(null, null, usersAutocompleteSchema),
-  users.autocomplete
+  users.autocompleteUsername
 );
 
 router.put('/update-password', guard, createValidator(updatePasswordSchema), users.update);
