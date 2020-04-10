@@ -74,7 +74,7 @@ export const editUserSchema = Yup.object().shape({
       if (
         await Users.findOne({
           username: value,
-          _id: { $ne: mongoose.Types.ObjectId(this.parent.id) },
+          _id: { $ne: mongoose.Types.ObjectId(this.parent.user.id) },
         })
       ) {
         return this.createError({
@@ -92,7 +92,7 @@ export const editUserSchema = Yup.object().shape({
     .min(6, 'min length is 6 charts')
     .test('unique', 'email already taken', async function (value) {
       if (
-        await Users.findOne({ email: value, _id: { $ne: mongoose.Types.ObjectId(this.parent.id) } })
+        await Users.findOne({ email: value, _id: { $ne: mongoose.Types.ObjectId(this.parent.user.id) } })
       ) {
         return this.createError({
           path: this.path,
