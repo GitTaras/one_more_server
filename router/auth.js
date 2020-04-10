@@ -1,7 +1,7 @@
 import PromiseRouter from 'express-promise-router';
 import * as users from '../controllers/users-controller';
-import guard from '../middlewares/guard-middleware';
-import createValidator from '../validation/create-validator';
+import { guard }from '../middlewares/guard-middleware';
+import { createValidator } from '../validation/create-validator';
 import { signInSchema, signUpSchema } from '../validation/validationSchemas';
 
 const router = PromiseRouter();

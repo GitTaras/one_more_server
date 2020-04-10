@@ -1,6 +1,6 @@
 import ApplicationError from './errors/ApplicationError';
 
-export default (err, req, res, next) => {
+export const errorHandler = (err, req, res, next) => {
   console.log(err);
   if (err instanceof ApplicationError) {
     res.status(err.status).json({ message: err.message });

@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import './database';
 import router from './router';
-import errorHandler from './utils/errorHandler';
+import { errorHandler } from './utils/errorHandler';
 
 const PORT = process.env.PORT || 8000;
 const app = express();

@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import Users from '../models/User';
 import ApplicationError from '../utils/errors/ApplicationError';
-import { Types } from 'mongoose';
 
 const { KEY_TOKEN } = process.env;
 
-export default async (req, res, next) => {
+export const guard = async (req, res, next) => {
   if (!req.headers.authorization) {
     throw new ApplicationError('Unauthorized', 401);
   }
