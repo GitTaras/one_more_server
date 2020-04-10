@@ -7,7 +7,6 @@ export const show = async (req, res) => {
   const { page = 1, hash_tag = undefined } = req.query;
 
   const { username } = req.params;
-console.log('username',username);
   const query = {};
 
   if (hash_tag) {
@@ -21,7 +20,6 @@ console.log('username',username);
   }
 
   const posts = await Posts.paginate(query, { sort: { _id: -1 }, page, limit: 15 });
-  posts.nextPage = +posts.page + 1;
   res.json(posts);
 };
 
