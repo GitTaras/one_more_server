@@ -5,6 +5,9 @@ const { Schema } = mongoose;
 
 const UserSchema = Schema(
   {
+    avatar: {
+      type: String,
+    },
     username: {
       type: String,
       minlength: 2,
@@ -35,8 +38,10 @@ const UserSchema = Schema(
 UserSchema.set('toJSON', {
   virtuals: true,
   transform: function (doc, ret) {
-    const hash = crypto.createHash('md5').update(ret.email).digest('hex');
-    ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
+    if (!ret.avatar) {
+      const hash = crypto.createHash('md5').update(ret.email).digest('hex');
+      ret.avatar = `https://www.gravatar.com/avatar/${hash}?s=200&d=retro`;
+    }
     delete ret._id;
     delete ret.password;
   },

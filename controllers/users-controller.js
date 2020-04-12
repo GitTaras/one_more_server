@@ -17,6 +17,18 @@ export const update = async (req, res) => {
   if (req.body.password) {
     req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(8));
   }
+  // req.file {
+  //   fieldname: 'avatar',
+  //     originalname: 'Screenshot from 2020-02-20 13-41-10.png',
+  //     encoding: '7bit',
+  //     mimetype: 'image/png',
+  //     destination: '/home/developer/Documents/test-task-server/uploads',
+  //     filename: '1586716208466-2bb8.png',
+  //     path: '/home/developer/Documents/test-task-server/uploads/1586716208466-2bb8.png',
+  //     size: 309057
+  // }
+
+  req.file && (req.body.avatar = `/uploads/${req.file.filename}`);
 
   const user = await Users.findOneAndUpdate({ _id: req.user.id }, req.body, {
     new: true,

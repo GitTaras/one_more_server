@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+import { extension } from 'mime-types';
 import Users from '../models/User';
 
 export const postSchema = Yup.object().shape({
@@ -64,9 +65,34 @@ export const signUpSchema = Yup.object().shape({
     .max(50, 'max length is 50 charts'),
 });
 
+export const avatarSchema = Yup.object().shape({
+  avatar: Yup.mixed()
+    .required('Image required')
+    .test('file type', 'Incorect file type', function (value) {
+      if(value && ['png', 'jpg', 'jpeg'].includes(extension(value.mimetype))) {
+        return value;
+      }
+      return this.createError({ path: this.path, message: 'Incorrect file type' });
+    }),
+});
+
 export const editUserSchema = Yup.object().shape({
+  // avatar: Yup.mixed()
+  //   .notRequired()
+  //   .test('file type', 'Incorect file type', function (value) {
+  //     console.log('value', value);
+  //     if (!value) {
+  //       console.log('value undefined');
+  //       return value;
+  //     } else if(['png', 'jpg', 'jpeg'].includes(extension(value.mimetype))) {
+  //       console.log('value jpeg');
+  //       return value;
+  //     } else {
+  //       console.log('value else');
+  //       return this.createError({path: this.path, message: 'Incorrect file type'});
+  //     }
+  //   }).default(null),
   username: Yup.string()
-    .required()
     .trim()
     .min(2, 'min length is 2 charts')
     .max(30, 'max length is 30 charts')
@@ -85,7 +111,6 @@ export const editUserSchema = Yup.object().shape({
       return value;
     }),
   email: Yup.string()
-    .required()
     .email()
     .trim()
     .max(30, 'max length is 30 charts')
