@@ -1,7 +1,7 @@
 import './dotenv/config';
 import faker from 'faker';
 import bcrypt from 'bcrypt';
-import db from './database';
+import { connection } from './database';
 import Users from './models/User';
 import Posts from './models/Post';
 import HashTags from './models/HashTag';
@@ -9,8 +9,7 @@ import HashTags from './models/HashTag';
 const init = async () => {
   try {
     console.log('Creating fake data...');
-    const con = await db;
-    await con.connection.db.dropDatabase();
+    (await connection).db.dropDatabase();
 
     const testdriveUserData = {
       username: 'testdrive',
