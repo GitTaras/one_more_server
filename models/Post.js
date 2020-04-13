@@ -47,7 +47,7 @@ class Post {
 }
 
 function autoPopulate() {
-  this.populate('author', { username: true, email: true, fullName: true });
+  this.populate('author', { username: true, email: true, avatar: true });
 }
 
 PostSchema.pre('find', autoPopulate);
@@ -55,7 +55,7 @@ PostSchema.pre('findOne', autoPopulate);
 
 PostSchema.post('save', function (doc, next) {
   doc
-    .populate('author', { username: true, email: true, fullName: true })
+    .populate('author', { username: true, email: true, avatar: true })
     .execPopulate()
     .then(function () {
       next();

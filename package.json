@@ -4,6 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "inspect": "nodemon --exec npm run babel-node ./index.js --inspect",
     "seeds": "babel-node ./seeds.js",
     "babel-node": "babel-node",
     "start": "nodemon --exec npm run babel-node ./index.js",
